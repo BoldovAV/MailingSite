@@ -37,7 +37,7 @@ EMAIL_ADMIN = os.getenv('EMAIL_ADMIN')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1%30^32)uk%=0j%q#f_d%yij1gkq8qsupsk%qu1=-^_qt8ibw%'
+SECRET_KEY = os.getenv('SECRET_KEY_PROJECT')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -95,10 +95,13 @@ WSGI_APPLICATION = 'curse.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'curse_django',
-        'USER': 'postgres',
-        'PASSWORD': PASSWORD_BD,
+        'ENGINE': os.getenv('ENGINE_BD'),
+        'NAME': os.getenv('NAME_BD'),
+        'USER': os.getenv('USER_BD'),
+        'PASSWORD': os.getenv('PASSWORD_BD'),
+        'HOST': os.getenv('HOST_BD'),
+        'PORT': os.getenv('PORT_BD'),
+
     }
 }
 
@@ -155,3 +158,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # LOGOUT_REDIRECT_URL = '/'
 # LOGIN_REDIRECT_URL = '/'
 # LOGIN_URL = '/'
+
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == '1'
+CACHES = {
+    "default": {
+        "BACKEND": os.getenv('CACHE_BACKEND'),
+        "LOCATION": os.getenv('CACHE_LOCATION'),
+    }
+}

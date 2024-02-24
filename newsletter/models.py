@@ -64,6 +64,8 @@ class Letter(models.Model):
 
     period_to_send = models.ManyToManyField(to='Newsletter', verbose_name='в каких рассылках')
 
+    creator = models.CharField(max_length=50, verbose_name='создатель письма', **NULLABLE)
+
     def __str__(self):
         return self.name_letter
 
