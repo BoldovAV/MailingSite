@@ -2,8 +2,16 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
-from newsletter.forms import NewsletterForm
+from newsletter.forms import NewsletterForm, LetterForm
 from newsletter.models import Newsletter, Letter
+
+
+# Контроллеры рассылок
+
+class NewsletterCreateView(CreateView):
+    model = Newsletter
+    form_class = NewsletterForm
+    success_url = reverse_lazy('newsletter:newsletter')
 
 
 class NewsletterListView(ListView):
@@ -28,15 +36,9 @@ class NewsletterDetailView(DetailView):
 #                     {% endfor %}
 
 
-class NewsletterCreateView(CreateView):
-    model = Newsletter
-    form_class = NewsletterForm
-    success_url = reverse_lazy('newsletter:newsletter')
-
-
 class NewsletterUpdateView(UpdateView):
     model = Newsletter
-    fields = ('name', 'time_to_send', 'period_start', 'period_fin', 'period', 'recipient',)
+    form_class = NewsletterForm
     success_url = reverse_lazy('newsletter:newsletter')
 
 
@@ -45,9 +47,28 @@ class NewsletterDeleteView(DeleteView):
     success_url = reverse_lazy('newsletter:newsletter')
 
 
+# Контроллеры писем
+
+class LetterCreateView(CreateView):
+    model = Letter
+    form_class = LetterForm
+    success_url = reverse_lazy('newsletter:letter')
+
+
 class LetterListView(ListView):
     model = Letter
 
 
 class LetterDetailView(DetailView):
     model = Letter
+
+
+class LetterUpdateView(UpdateView):
+    model = Letter
+    form_class = LetterForm
+    success_url = reverse_lazy('newsletter:letter')
+
+
+class LetterDeleteView(DeleteView):
+    model = Letter
+    success_url = reverse_lazy('newsletter:letter')

@@ -28,8 +28,8 @@
 
                 </ul>
 
-                <button type="button" class="btn btn-lg btn-block btn-outline-primary"
-                        href="{% url 'newsletter:newsletter' %}">Подробнее
+                <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'newsletter:letter_update' object.pk %}">Изменить</a>
+                <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'newsletter:letter_delete' object.pk %}">Удалить</a>
                 </button>
 
             </div>

@@ -12,7 +12,12 @@ class StyleForMixin:
 
 
 class NewsletterForm(StyleForMixin, forms.ModelForm):
-
     class Meta:
         model = Newsletter
         fields = ('time_to_send', 'period_start', 'period_fin', 'period', 'recipient',)
+
+
+class LetterForm(StyleForMixin, forms.ModelForm):
+    class Meta:
+        model = Letter
+        fields = ('name_letter', 'text_letter', 'period_to_send',)

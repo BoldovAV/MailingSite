@@ -9,6 +9,9 @@
 
 {% block context%}
 <div class="row text-center">
+    <div class="row text-center">
+    <a class="btn btn-lg btn-block btn-outline-primary"
+       href="{% url 'newsletter:letter_create' %}">Создать новое письмо</a>
     {% for item in object_list %}
 
     <div class="col-3">
@@ -18,7 +21,7 @@
             </div>
             <div class="card-body">
 
-                <h1 class="card-title pricing-card-title">{{ item.text_letter }}</h1>
+                <h6 class="card-title pricing-card-title">{{ item.text_letter }}</h6>
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                     <li>
                     </li>
