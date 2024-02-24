@@ -36,7 +36,7 @@ class Newsletter(models.Model):
         (MONT, 'раз в месяц'),
         (MINU, 'раз в минуту (на тесты)'),
     )
-
+    name = models.CharField(max_length=50, default='без имени', verbose_name='название рассылки', **NULLABLE)
     time_to_send = models.TimeField(verbose_name='время рассылки')
     period_start = models.DateField(verbose_name='дата начала рассылки')
     period_fin = models.DateField(verbose_name='дата конца рассылки')
@@ -55,7 +55,7 @@ class Newsletter(models.Model):
         ordering = ('status',)
 
     def __str__(self):
-        return f'{self.period_start} -> {self.period_fin}'
+        return self.name
 
 
 class Letter(models.Model):

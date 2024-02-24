@@ -5,7 +5,7 @@ from newsletter.models import Newsletter, Client, Letter
 
 @admin.register(Newsletter)
 class NewsletterAdmin(admin.ModelAdmin):
-    list_display = ('id', 'time_to_send', 'period_start', 'period_fin', 'status')
+    list_display = ('name', 'time_to_send', 'period_start', 'period_fin', 'status')
     list_filter = ('time_to_send',)
     search_fields = ('status',)
     readonly_fields = ('status',)
