@@ -1,0 +1,45 @@
+{% extends 'newsletter/base.html' %}
+{% block title%}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        Подробно о клиенте '{{ object }}'
+    </h1>
+</div>
+{% endblock %}
+
+{% block context%}
+<div class="row text-center">
+
+    <div class="col-3">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Карточка клиента</h4>
+            </div>
+            <div class="card-body">
+
+                <h6 class="card-title pricing-card-title">
+                    Имя: {{ object.first_name }}
+                </h6>
+                <h6 class="card-title pricing-card-title">
+                    Фамилия: {{ object.last_name }}
+                </h6>
+                <h6 class="card-title pricing-card-title">
+                    Отчество: {{ object.second_name }}
+                </h6>
+                <h6 class="card-title pricing-card-title">
+                    Почта: {{ object.email }}
+                </h6>
+                <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                    <li>Что можно о нем сказать: {{ object.comment }}
+                    </li>
+
+                </ul>
+                <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'newsletter:client_update' object.pk %}">Изменить</a>
+                <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'newsletter:client_delete' object.pk %}">Удалить</a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

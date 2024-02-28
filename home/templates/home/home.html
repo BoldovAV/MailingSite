@@ -1,0 +1,61 @@
+{% extends 'newsletter/base.html' %}
+
+{% block title%}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        Хоть обрассылайся
+    </h1>
+</div>
+{% endblock %}
+
+{% block context%}
+<div class="row text-center">
+    <div class="col-4">
+        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+            Всего рассылок:
+        </ul>
+    </div>
+    <div class="col-4">
+        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+            Активных рассылок:
+        </ul>
+    </div>
+        <div class="col-4">
+        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+            ?Уникальных? пользователей:
+        </ul>
+    </div>
+</div>
+<div class="col-12">
+    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+       Всего рассылок:
+    </ul>
+
+    <div class="row">
+        <div class="col-6">
+                <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                    Всего рассылок2:
+                </ul>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <a class="btn btn-lg btn-block btn-outline-primary"
+       href="{% url 'newsletter:newsletter_create' %}">Создать новую рассылку</a>
+    <div class="row">
+        <div class="col-6">
+            <ul></ul>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <a class="btn btn-lg btn-block btn-outline-primary"
+       href="{% url 'newsletter:newsletter_create' %}">Создать новую рассылку</a>
+    <div class="row">
+        <div class="col-6">
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

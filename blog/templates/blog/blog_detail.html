@@ -19,7 +19,7 @@
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                     <li>{{ object.message }}</li>
                     {% if object.preview %}
-                        <img href="/media/{{ object.preview }}" alt="..." class="img-thumbnail">
+                        <img src="{{ object.preview.url }}" alt="..." class="img-thumbnail">
                     {% endif %}
                 </ul>
 

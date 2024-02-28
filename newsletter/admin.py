@@ -21,3 +21,4 @@ class ClientAdmin(admin.ModelAdmin):
 class LetterAdmin(admin.ModelAdmin):
     list_display = ('name_letter', 'text_letter')
     list_filter = ('name_letter',)
+

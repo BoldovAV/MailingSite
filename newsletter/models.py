@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 NULLABLE = {'null': True, 'blank': True}
@@ -6,9 +7,12 @@ NULLABLE = {'null': True, 'blank': True}
 class Client(models.Model):
     email = models.EmailField(unique=True, verbose_name='почта клиента')
     first_name = models.CharField(max_length=50, verbose_name='имя')
-    second_name = models.CharField(max_length=50, verbose_name='отчество', **NULLABLE)
+    second_name = models.CharField(max_length=50, default='-', verbose_name='отчество', **NULLABLE)
     last_name = models.CharField(max_length=50, verbose_name='фамилия')
     comment = models.TextField(verbose_name='комментарий', **NULLABLE)
+
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+                                verbose_name='создатель рассылки', **NULLABLE)
 
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
@@ -45,14 +49,23 @@ class Newsletter(models.Model):
     status = models.IntegerField(choices=Conditions.choices, default=0,
                                  verbose_name='статус рассылки')
 
-    creator = models.CharField(max_length=50, verbose_name='создатель рассылки', **NULLABLE)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+                                verbose_name='создатель рассылки', **NULLABLE)
 
     recipient = models.ManyToManyField(to='Client', verbose_name='получатели', **NULLABLE)
+
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
         ordering = ('status',)
+        permissions = [
+            (
+                'view_all_newsletter',
+                'Can view all newsletter'
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -64,7 +77,8 @@ class Letter(models.Model):
 
     period_to_send = models.ManyToManyField(to='Newsletter', verbose_name='в каких рассылках')
 
-    creator = models.CharField(max_length=50, verbose_name='создатель письма', **NULLABLE)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+                                verbose_name='создатель рассылки', **NULLABLE)
 
     def __str__(self):
         return self.name_letter
@@ -73,3 +87,17 @@ class Letter(models.Model):
         verbose_name = 'письмо'
         verbose_name_plural = 'письма'
         ordering = ('name_letter',)
+
+
+class Mail_log(models.Model):
+    last_try = models.DateField(auto_now=True, verbose_name='дата последней попытки')
+    status_try = models.BooleanField(verbose_name='статус попытки')
+    answer_server = models.CharField(max_length=150, verbose_name='ответ сервера', **NULLABLE)
+
+    def __str__(self):
+        return self.last_try
+
+    class Meta:
+        verbose_name = 'лог'
+        verbose_name_plural = 'логи'
+        ordering = ('last_try', 'status_try',)

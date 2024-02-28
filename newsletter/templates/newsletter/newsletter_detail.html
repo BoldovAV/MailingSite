@@ -19,8 +19,12 @@
 
                 <h3 class="card-title pricing-card-title">
                     Получатели:
+                    {% for client in clients %}
+                        <h6 class="card-title pricing-card-title">
+                            - {{ client }}
+                        </h6>
+                    {% endfor %}
 
-                        {{ object.recipient }}
 
 
                 </h3>
@@ -29,6 +33,12 @@
                     </li>
 
                 </ul>
+                {% if object.is_active and request.user.is_staff %}
+                    <a class="btn btn-lg btn-danger btn-block" href="{% url 'newsletter:newsletter_deactivate' object.pk %}">Отключить</a>
+                {% elif request.user.is_staff %}
+                    <a class="btn btn-lg btn-success btn-block" href="{% url 'newsletter:newsletter_deactivate' object.pk %}">Включить</a>
+                {% endif %}
+
                 <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'newsletter:newsletter_update' object.pk %}">Изменить</a>
                 <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'newsletter:newsletter_delete' object.pk %}">Удалить</a>
 

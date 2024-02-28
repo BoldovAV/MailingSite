@@ -1,6 +1,6 @@
 from django.db import models
 
-NULLABLE = {'null': True, 'blank': True}
+from newsletter.models import NULLABLE
 
 
 class Blog(models.Model):
@@ -14,5 +14,6 @@ class Blog(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'публикация'
-        verbose_name_plural = 'публикации'
+        verbose_name = 'запись'
+        verbose_name_plural = 'записи'
+        ordering = ('count_view',)
