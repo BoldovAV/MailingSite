@@ -8,9 +8,7 @@ from newsletter.models import Newsletter, Client
 
 def home(request):
     blog_all = list(Blog.objects.all())
-    print(blog_all)
     blog_list_home = random.sample(blog_all, k=3)
-
     context = {
         'title': 'Домашняя страница',
         'object_all': len(Newsletter.objects.all()),
