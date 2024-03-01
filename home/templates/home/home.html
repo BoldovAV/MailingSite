@@ -12,50 +12,60 @@
 <div class="row text-center">
     <div class="col-4">
         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-            Всего рассылок:
+            Всего рассылок: {{ object_all }}
         </ul>
     </div>
     <div class="col-4">
         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-            Активных рассылок:
+            Активных рассылок: {{ object_is_active }}
         </ul>
     </div>
-        <div class="col-4">
+    <div class="col-4">
         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-            ?Уникальных? пользователей:
+            Наши клиенты, все уникальны, как снежинки, а всего их: {{ client_all }}
         </ul>
     </div>
 </div>
 <div class="col-12">
-    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-       Всего рассылок:
-    </ul>
 
-    <div class="row">
-        <div class="col-6">
+    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+        Наши статьи:
+    </ul>
+    <div class="row text-center">
+    {% for item in blog_list %}
+    <div class="col-3">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h2 class="my-0 font-weight-normal">{{ item.name }}</h2>
+            </div>
+            <div class="card-body">
+
+                <h1 class="card-title pricing-card-title"></h1>
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                    Всего рассылок2:
+                    <li> дата создания - {{ item.date_create }}</li>
                 </ul>
+                <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                    <li> число просмотров - {{ item.count_view }}</li>
+                </ul>
+                <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'blog:post' item.pk %}">Читать</a>
+                {% if perms.blog.change_blog %}
+                <a class="btn btn-lg btn-block btn-outline-primary"
+                   href="{% url 'blog:blog_change' item.pk %}">Изменить</a>
+                {% endif %}
+                {% if perms.blog.delete_blog %}
+                <a class="btn btn-lg btn-block btn-outline-primary"
+                   href="{% url 'blog:post_delete' item.pk %}">Удалить</a>
+                {% endif %}
+
+            </div>
         </div>
+
     </div>
-</div>
-<div class="col-12">
-    <a class="btn btn-lg btn-block btn-outline-primary"
-       href="{% url 'newsletter:newsletter_create' %}">Создать новую рассылку</a>
-    <div class="row">
-        <div class="col-6">
-            <ul></ul>
-        </div>
+    {% endfor %}
     </div>
+
+
 </div>
-<div class="col-12">
-    <a class="btn btn-lg btn-block btn-outline-primary"
-       href="{% url 'newsletter:newsletter_create' %}">Создать новую рассылку</a>
-    <div class="row">
-        <div class="col-6">
-            <ul></ul>
-        </div>
-    </div>
-</div>
+
 
 {% endblock %}
