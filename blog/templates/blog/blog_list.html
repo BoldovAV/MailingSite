@@ -26,7 +26,11 @@
                 <h2 class="my-0 font-weight-normal">{{ item.name }}</h2>
             </div>
             <div class="card-body">
-
+                <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                    {% if item.preview %}
+                        <img src="{{ item.preview.url }}" alt="..." class="img-thumbnail">
+                    {% endif %}
+                </ul>
                 <h1 class="card-title pricing-card-title"></h1>
                 <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                     <li> дата создания - {{ item.date_create }}</li>
