@@ -22,9 +22,9 @@ class NewsletterCreateView(CreateView):
         return super().form_valid(form)
 
 
-class NewsletterListView(PermissionRequiredMixin, ListView):
+class NewsletterListView(ListView):
     model = Newsletter
-    permission_required = 'newsletter.view_all_newsletter'
+    # permission_required = 'newsletter.view_all_newsletter'
 
 
 class NewsletterDetailView(DetailView):

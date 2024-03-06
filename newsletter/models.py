@@ -56,6 +56,8 @@ class Newsletter(models.Model):
 
     is_active = models.BooleanField(default=True)
 
+    last_try = models.DateTimeField(verbose_name='дата/время последней отправки', **NULLABLE)
+
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'

@@ -23,6 +23,8 @@ def mail_process(*args, **kwargs):
                         message=letter.text_letter,
                         recipient_list=recipient_list,
                     )
+                    letter.last_try = datetime.now()
+                    letter.save()
                     Mail_log.objects.create(status_try=200, answer_server='OK')
                 except BadHeaderError as err:
                     Mail_log.objects.create(status_try=500, answer_server=str(err))
@@ -41,23 +43,42 @@ def check_newsletter_status():
     )
     need_send = []
     for news in newsletter_all:
-        if (news.time_to_send <= current_time <= (news.time_to_send + timedelta(minutes=1)).time() and
+        if (0 < (news.time_to_send - current_time).total_seconds() < 60 and
                 news.period_start <= current_date <= news.period_fin):
             news.status = 1
             news.save()
             if news.period in ['MINU', 'DAYS']:
                 need_send.append(news)
-            elif news.period == 'WEEK':
-                if ((current_date - news.period_start).days % 7) == 0:
-                    need_send.append(news)
-            elif news.period == 'MONT':
-                if ((current_date - news.period_start).days % 30) == 0:
-                    need_send.append(news)
+            elif news.period == 'WEEK' and (current_date - news.last_try.total_seconds()/86400) == 7:
+                need_send.append(news)
+            elif news.period == 'MONT' and (current_date - news.last_try.total_seconds()/86400) == 30:
+                need_send.append(news)
         elif (news.time_to_send < current_time and
               news.period_fin <= current_date):
             news.status = 2
             news.save()
     return need_send
+
+
+# Старая логика:
+# for news in newsletter_all:
+#     if (news.time_to_send <= current_time <= (news.time_to_send + timedelta(minutes=1)).time() and
+#             news.period_start <= current_date <= news.period_fin):
+#         news.status = 1
+#         news.save()
+#         if news.period in ['MINU', 'DAYS']:
+#             need_send.append(news)
+#         elif news.period == 'WEEK':
+#             if ((current_date - news.period_start).days % 7) == 0:
+#                 need_send.append(news)
+#         elif news.period == 'MONT':
+#             if ((current_date - news.period_start).days % 30) == 0:
+#                 need_send.append(news)
+#     elif (news.time_to_send < current_time and
+#           news.period_fin <= current_date):
+#         news.status = 2
+#         news.save()
+
 
 # start = datetime(2024, 2, 16).date()
 # seicas = datetime.now().date()
