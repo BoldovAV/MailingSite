@@ -93,7 +93,7 @@ class Letter(models.Model):
 
 class Mail_log(models.Model):
     last_try = models.DateField(auto_now=True, verbose_name='дата последней попытки')
-    status_try = models.BooleanField(verbose_name='статус попытки')
+    status_try = models.PositiveIntegerField(verbose_name='статус попытки')
     answer_server = models.CharField(max_length=150, verbose_name='ответ сервера', **NULLABLE)
 
     def __str__(self):

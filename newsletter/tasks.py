@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.core.mail import send_mail, BadHeaderError
 from django.db.models import Q
 
+from curse import settings
 from curse.celery import app
 from newsletter.models import Newsletter, Client, Letter, Mail_log
 
@@ -14,7 +15,9 @@ def mail_process(*args, **kwargs):
     print('Hello world!')
     if len(need_send) > 0:
         for news in need_send:
-            recipient_list = list(news.client_set.all().email)
+            # recipient_list = list(news.recipient.all())
+            recipient_list = [client.email for client in news.recipient.all()]
+            print(recipient_list)
             letter_list = list(news.letter_set.all())
             for letter in letter_list:
                 try:
@@ -22,6 +25,7 @@ def mail_process(*args, **kwargs):
                         subject=letter.name_letter,
                         message=letter.text_letter,
                         recipient_list=recipient_list,
+                        from_email=settings.EMAIL_ADMIN
                     )
                     letter.last_try = datetime.now()
                     letter.save()
@@ -38,32 +42,64 @@ def check_newsletter_status():
     current_time_delta = timedelta(hours=current_datetime.hour, minutes=current_datetime.minute)
     print('мы тут')
     newsletter_all = Newsletter.objects.filter(
-        Q(status__in=(0, 1)),
-        Q(is_active=True)
+        status__in=[0, 1],
+        is_active=True
     )
-    print(newsletter_all.objects.all())
+    # newsletter_all = Newsletter.objects.filter(
+    #     Q(status__in=(0, 1)),
+    #     Q(is_active=True)
+    # )
+    print(newsletter_all)
     print('и мы тут')
     need_send = []
+    print(need_send)
     for news in newsletter_all:
         send_time = timedelta(hours=news.time_to_send.hour, minutes=news.time_to_send.minute)
-        if (0 < (send_time - current_time_delta).total_seconds() < 60 and
-                news.period_start <= current_datetime.date() <= news.period_fin):
+        # print(news.period)
+        # print(news.period_start)
+        # print(current_datetime.date())
+        # print(news.period_fin)
+        # print(news.period_start <= current_datetime.date() <= news.period_fin)
+        # print(0 < (send_time - current_time_delta).total_seconds() < 60)
+
+        print('первая прошла')
+        need_time = 0 < (send_time - current_time_delta).total_seconds() < 60
+        need_date = news.period_start <= current_datetime.date() <= news.period_fin
+        if need_date and news.period == 'раз в минуту (на тесты)' and news.status == 1:
+            print('Hiiii minuta')
+            need_send.append(news)
+        if need_date and news.status == 0:
+            print(news.status)
             news.status = 1
             news.save()
-            print(news.period)
-            if news.period == 'раз в минуту (на тесты)':
-                print('Hiiii')
+            print(news.status)
+        if need_time and need_date:
+            # print(news.status)
+            # if news.status == 0:
+            #     news.status = 1
+            #     news.save()
+            # print(news.status)
+            # if news.period == 'раз в минуту (на тесты)':
+            #     print('Hiiii minuta')
+            #     need_send.append(news)
+            if (news.period == 'раз в день' and
+                    (current_datetime - timedelta(days=news.last_try.day) / 86400) == 1):
                 need_send.append(news)
-            elif news.period == 'раз в день' and (current_datetime - timedelta(days=news.last_try.day)/86400) == 1:
+            elif (news.period == 'раз в неделю' and
+                  (current_datetime - timedelta(days=news.last_try.day) / 86400) == 7):
                 need_send.append(news)
-            elif news.period == 'раз в неделю' and (current_datetime - timedelta(days=news.last_try.day)/86400) == 7:
+            elif (news.period == 'раз в месяц' and
+                  (current_day_delta - timedelta(days=news.last_try.day) / 86400) == 30):
                 need_send.append(news)
-            elif news.period == 'раз в месяц' and (current_day_delta - timedelta(days=news.last_try.day)/86400) == 30:
-                need_send.append(news)
-            elif (news.time_to_send < current_datetime.time() and
-                  news.period_fin <= current_datetime.date()):
-                news.status = 2
-                news.save()
+        elif (news.time_to_send < current_datetime.time() and
+              news.period_fin <= current_datetime.date()):
+            news.status = 2
+            news.save()
+        # elif (news.period == 'раз в минуту (на тесты)' and
+        #         (news.period_start <= current_datetime.date() <= news.period_fin) and news.status == 1):
+        #     print('Hiiii minuta')
+        #     need_send.append(news)
+    print(need_send)
     return need_send
 
 # Старая логика:
