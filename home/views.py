@@ -9,7 +9,12 @@ from newsletter.models import Newsletter, Client
 
 def home(request):
     blog_all = list(Blog.objects.all())
-    blog_list_home = random.sample(blog_all, k=3)
+    if len(blog_all) >= 3:
+        blog_list_home = random.sample(blog_all, k=3)
+    elif len(blog_all) in [1, 2]:
+        blog_list_home = random.sample(blog_all, k=len(blog_all))
+    else:
+        blog_list_home = None
     context = {
         'title': 'Хоть обрассылайся',
         'object_all': len(Newsletter.objects.all()),

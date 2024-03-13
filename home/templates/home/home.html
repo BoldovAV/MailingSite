@@ -27,11 +27,12 @@
     </div>
 </div>
 <div class="col-12">
-
+    {% if blog_list %}
     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
         Наши статьи:
     </ul>
     <div class="row text-center">
+
         {% for item in blog_list %}
         <div class="col-3">
             <div class="card mb-4 box-shadow">
@@ -66,7 +67,9 @@
 
         </div>
         {% endfor %}
+
     </div>
+    {% endif %}
 
 
 </div>
